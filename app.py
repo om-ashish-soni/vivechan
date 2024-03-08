@@ -64,18 +64,22 @@ st.markdown(
 
 query = st.text_input("Ask any question related to the Shiv Mahapuran: ")
 
+asked=False
+
+if asked:
+    st.write("generating answer .....")
 
 if st.button('Ask'):
-    
+    asked=True
     encoded=Encoder.encode([query])
     D,I=VectorIndex.search(encoded,k)
     Context=generate_context(Texts,I[0])
     print("Going to infer")
     Answer=infer(query,Context)
     print("Retrived Answer")
-    
-    speaking_thread = threading.Thread(target=speak, args=(Answer,))
-    speaking_thread.start()
+    asked=False
+    # speaking_thread = threading.Thread(target=speak, args=(Answer,))
+    # speaking_thread.start()
 
     wrapped_text = textwrap.fill(Answer, width=max_line_length)
 
@@ -88,7 +92,10 @@ if st.button('Ask'):
       time.sleep(0.01)  # Adjust the sleep duration as needed
     st.write("\n------------------------------")
 
-    speaking_thread.join()
-    print("joined speaker")
+    speak(Answer)
+
+    # speaking_thread.join()
+    # print("joined speaker")
+
     
 display_footer()
