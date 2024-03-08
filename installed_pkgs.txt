@@ -1,0 +1,20 @@
+! pip install transformers
+! pip install scikit-learn
+! pip install datasets
+! pip install faiss-cpu
+! pip install sentence_transformers
+! pip install gTTS pygame pydub
+!pip3 install -q -U bitsandbytes==0.42.0
+!pip3 install -q -U peft==0.8.2
+!pip3 install -q -U trl==0.7.10
+!pip3 install -q -U accelerate==0.27.1
+!pip3 install -q -U datasets==2.17.0
+!pip3 install -q -U transformers==4.38.0
+!pip3 install -q -U torch
+!pip install streamlit
+!pip install python-dotenv
+
+ALL IN ONE
+
+pip install transformers scikit-learn datasets faiss-cpu sentence_transformers gTTS pygame pydub bitsandbytes peft trl accelerate torch streamlit python-dotenv
+pip install -q -U bitsandbytes==0.42.0 peft==0.8.2 trl==0.7.10 accelerate==0.27.1 datasets==2.17.0 transformers==4.38.0
