@@ -33,7 +33,6 @@ def query(payload):
 
     # API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
     API_URL = "https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1"
-        
 
     headers = {"Authorization": "Bearer "+hf_token}
     
@@ -41,29 +40,35 @@ def query(payload):
     return response.json()
 
 def infer(Query,Context):
-    # Prefix="Giving you 'Query' Below Answer appropriate based on Given 'Context'"
-    Prefix="Hello, Spiritual Vivechan Expert, Answer appropriately for given 'Query' based on Given 'Context' provided"
+  try:
+      # Prefix="Giving you 'Query' Below Answer appropriate based on Given 'Context'"
+      Prefix="Hello, Spiritual Vivechan Expert, Answer appropriately for given 'Query' based on Given 'Context' provided"
 
-    # Query="Who are you? and Who am I?"
-    # Context="Mistral"
-    output = query({
-        "inputs": f"""
-        <s>[INST] 
-  {Prefix}
-  
-  'Query' : {Query}
-  'Context' : {Context}
-  [/INST]
-  Model answer</s>
-        """,
-        "parameters": 
-      {
-        "contentType": "application/json",
-        "max_tokens": 1000,
-        "min_tokens": 1000,
-        "return_full_text": False
-      }
-    })
+      # Query="Who are you? and Who am I?"
+      # Context="Mistral"
+      output = query({
+          "inputs": f"""
+          <s>[INST] 
+    {Prefix}
+    
+    'Query' : {Query}
+    'Context' : {Context}
+    [/INST]
+    Model answer</s>
+          """,
+          "parameters": 
+        {
+          "contentType": "application/json",
+          "max_tokens": 1000,
+          "min_tokens": 1000,
+          "return_full_text": False
+        }
+      })
 
-    return output[0]['generated_text']
+      print("output generated",output)
+
+      return output[0]['generated_text']
+  except Exception as e:
+        print(f"An error occurred: {e}")
+        return f"could not generate answer Due to Error, please try after some time ,{e} "  
 
