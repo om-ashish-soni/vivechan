@@ -6,16 +6,31 @@ import string
 import torch
 import streamlit as st
 import time
+import textwrap
 
 # def speaking_icon(speaking_thread):
 #     while speaking_thread.is_alive():  # This will run indefinitely until stopped
 #         st.write("Speaking...")
 #         time.sleep(0.5)
-        
+
+def write_answer(Answer,max_line_length):
+    paragraphs=Answer.split('<br/>')
+    for paragraph in paragraphs:
+        wrapped_text = textwrap.fill(paragraph, width=max_line_length)
+
+        placeholder = st.empty()
+
+        prev_text=''
+        for char in wrapped_text:
+            prev_text=prev_text+char
+            placeholder.text(prev_text)
+            time.sleep(0.001)  # Adjust the sleep duration as needed
+        st.write('\n\n')
+  
 def generate_context(Texts,Positions):
     context=""
     for Pos in Positions:
-        context+=Texts[Pos]+"\n\t"
+        context+=Texts[Pos]+"<br/>\t"
     return context
 
 # Define a function to dynamically set the device

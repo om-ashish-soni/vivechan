@@ -1,4 +1,4 @@
-from util import generate_unique_audio_filename,delete_temp_audio,generate_context,display_footer
+from util import generate_unique_audio_filename,delete_temp_audio,generate_context,display_footer,write_answer
 from text_to_speech import speak
 from dataset.dataset import load_text_dataset
 from indices.index import load_index
@@ -9,6 +9,7 @@ import textwrap
 import time
 import json
 import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 k=10
 max_line_length = 80
@@ -69,33 +70,31 @@ asked=False
 if asked:
     st.write("generating answer .....")
 
-if st.button('Ask'):
-    asked=True
-    encoded=Encoder.encode([query])
-    D,I=VectorIndex.search(encoded,k)
-    Context=generate_context(Texts,I[0])
-    print("Going to infer")
-    Answer=infer(query,Context)
-    print("Retrived Answer")
-    asked=False
-    # speaking_thread = threading.Thread(target=speak, args=(Answer,))
-    # speaking_thread.start()
+if "state" not in st.session_state:
+    if st.button('Ask'):
+        st.session_state['state']=1
+        
+        asked=True
+        encoded=Encoder.encode([query])
+        D,I=VectorIndex.search(encoded,k)
+        Context=generate_context(Texts,I[0])
+        # print("Going to infer")
+        # Answer=infer(query,Context)
+        # print("Retrived Answer")
+        Answer=Context
+        asked=False
+        
+        write_answer(Answer,max_line_length)
+        speak(Answer)
 
-    wrapped_text = textwrap.fill(Answer, width=max_line_length)
-
-    placeholder = st.empty()
-
-    prev_text=''
-    for char in wrapped_text:
-      prev_text=prev_text+char
-      placeholder.text(prev_text)
-      time.sleep(0.01)  # Adjust the sleep duration as needed
-    st.write("\n------------------------------")
-
-    speak(Answer)
-
-    # speaking_thread.join()
-    # print("joined speaker")
+        del st.session_state['state']
+        asked=False
+        
+        
+else:
+    if asked:
+        st.write("Generating Answer ......")
+    
 
     
 display_footer()
